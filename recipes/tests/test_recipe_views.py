@@ -36,6 +36,15 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertEqual(len(response_context_recipes), 1)
         self.assertEqual(response.status_code, 200)
 
+    def test_recipe_home_template_wont_load_recipes_not_published(self):
+        # Need a recipe for this test
+        self.make_recipe(is_published=False)
+
+        response = self.client.get(reverse('recipes:home'))
+        content = response.content.decode('utf-8')
+
+        self.assertIn('<h1>No recipes found here 😭</h1>', content)
+
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
         self.assertIs(view.func, views.category)
@@ -46,6 +55,7 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertEqual(response.status_code, 404)
 
     def test_recipe_category_template_loads_recipes(self):
+        # Need a recipe for this test
         needed_title = 'This is a category test'
         self.make_recipe(title=needed_title)
 
@@ -71,6 +81,7 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertEqual(response.status_code, 404)
 
     def test_recipe_detail_template_loads_the_correct_recipe(self):
+        # Need a recipe for this test
         needed_title = 'This is a detail page - It load one recipe'
         self.make_recipe(title=needed_title)
 
