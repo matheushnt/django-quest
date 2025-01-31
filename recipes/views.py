@@ -1,8 +1,12 @@
+import os
+
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404
 from django.db.models import Q
 from utils.pagination import make_pagination
 from .models import Recipe
+
+PER_PAGE = os.environ.get('PER_PAGE', 6)
 
 
 # Create your views here.
@@ -14,7 +18,7 @@ def home(request):
     page_obj, pagination_range = make_pagination(
         request,
         recipes,
-        9,
+        PER_PAGE,
     )
 
     return render(request, 'recipes/pages/home.html', context={
@@ -34,7 +38,7 @@ def category(request, category_id):
     page_obj, pagination_range = make_pagination(
         request,
         recipes,
-        9,
+        PER_PAGE,
     )
 
     return render(request, 'recipes/pages/category.html', context={
@@ -71,7 +75,7 @@ def search(request):
     page_obj, pagination_range = make_pagination(
         request,
         recipes,
-        9,
+        PER_PAGE,
     )
 
     context = {
