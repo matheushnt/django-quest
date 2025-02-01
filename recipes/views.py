@@ -17,6 +17,8 @@ def home(request):
     ).order_by('-id')
 
     messages.error(request, 'OPA, VOCÊ PESQUISOU ALGO QUE EU VI')
+    messages.success(request, 'OPA, VOCÊ PESQUISOU ALGO QUE EU VI')
+    messages.info(request, 'OPA, VOCÊ PESQUISOU ALGO QUE EU VI')
 
     page_obj, pagination_range = make_pagination(
         request,
