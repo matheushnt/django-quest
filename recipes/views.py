@@ -3,6 +3,7 @@ import os
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404
 from django.db.models import Q
+from django.contrib import messages
 from utils.pagination import make_pagination
 from .models import Recipe
 
@@ -14,6 +15,8 @@ def home(request):
     recipes = Recipe.objects.filter(
         is_published=True,
     ).order_by('-id')
+
+    messages.error(request, 'OPA, VOCÊ PESQUISOU ALGO QUE EU VI')
 
     page_obj, pagination_range = make_pagination(
         request,
