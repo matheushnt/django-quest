@@ -2,8 +2,13 @@ from django import forms
 from django.contrib.auth.models import User
 
 
+def add_attr(field, attr_name, attr_new_value):
+    existing = field.widget.attr.get(attr_name, '')
+    field.widget.attr[attr_name] = f'{existing} {attr_new_value}'.strip()
+
+
 def add_placeholder(field, attr_new_value):
-    field.widget.attrs['placeholder'] = attr_new_value
+    add_attr(field, 'placeholder', attr_new_value)
 
 
 class RegisterForm(forms.ModelForm):
