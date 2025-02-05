@@ -2,7 +2,43 @@ from django import forms
 from django.contrib.auth.models import User
 
 
+def add_placeholder(field, attr_new_value):
+    field.widget.attrs['placeholder'] = attr_new_value
+
+
 class RegisterForm(forms.ModelForm):
+    # First way to overwrite fields
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        add_placeholder(self.fields['username'], 'Your username')
+        add_placeholder(self.fields['first_name'], 'Ex.: John')
+        add_placeholder(self.fields['last_name'], 'Ex.: Doe')
+        add_placeholder(self.fields['email'], 'Your e-mail')
+
+    # Second way to overwrite fields
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Your password'
+        }),
+        error_messages={
+            'rquired': 'Password must not be empty'
+        },
+        help_text=(
+            'Password must have at least one uppercase letter, '
+            'one lowercase letter and one number. The length should be '
+            'at least 8 characters.'
+        ),
+    )
+
+    confirm_password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Confirm your password'
+        })
+    )
+
+    # Third way to overwrite fields
     class Meta:
         model = User
         fields = [
