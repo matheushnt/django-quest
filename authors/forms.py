@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr_name, attr_new_value):
-    existing = field.widget.attr.get(attr_name, '')
-    field.widget.attr[attr_name] = f'{existing} {attr_new_value}'.strip()
+    existing = field.widget.attrs.get(attr_name, '')
+    field.widget.attrs[attr_name] = f'{existing} {attr_new_value}'.strip()
 
 
 def add_placeholder(field, attr_new_value):
@@ -83,3 +84,15 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password here'
             }),
         }
+
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+
+        if 'atenção' in data:
+            raise ValidationError(
+                'Do not enter "%(value)s" in the password field',
+                code='invalid',
+                params={
+                    'value': 'atenção'
+                }
+            )
