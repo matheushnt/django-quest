@@ -48,11 +48,13 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
         ),
+        label='Password',
         validators=[strong_password]
     )
     confirm_password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        label='Confirm password',
     )
 
     class Meta:
@@ -69,7 +71,6 @@ class RegisterForm(forms.ModelForm):
             'last_name': 'Last name',
             'username': 'Username',
             'email': 'Email',
-            'password': 'Password',
         }
         help_texts = {
             'email': 'The e-mail must be valid.',
