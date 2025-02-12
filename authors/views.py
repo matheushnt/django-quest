@@ -23,7 +23,7 @@ def create(request):
         raise Http404()
 
     POST = request.POST
-    request.session['request_form_data'] = POST
+    request.session['register_form_data'] = POST
     form = RegisterForm(POST)
 
     if form.is_valid():

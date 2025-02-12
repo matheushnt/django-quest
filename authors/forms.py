@@ -37,6 +37,12 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(
             self.fields['confirm_password'], 'Repeat your password')
 
+    username = forms.CharField(
+        error_messages={
+            'required': 'This field must not be empty'
+        },
+    )
+
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
@@ -74,11 +80,6 @@ class RegisterForm(forms.ModelForm):
         }
         help_texts = {
             'email': 'The e-mail must be valid.',
-        }
-        error_messages = {
-            'username': {
-                'required': 'This field must not be empty'
-            },
         }
 
     def clean_password(self):
