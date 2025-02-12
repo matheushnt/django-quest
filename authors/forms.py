@@ -37,10 +37,33 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(
             self.fields['confirm_password'], 'Repeat your password')
 
+    first_name = forms.CharField(
+        label='First name',
+        error_messages={
+            'required': 'Type your first name'
+        },
+    )
+
+    last_name = forms.CharField(
+        label='Last name',
+        error_messages={
+            'required': 'Type your last name'
+        },
+    )
+
     username = forms.CharField(
+        label='Username',
         error_messages={
             'required': 'This field must not be empty'
         },
+    )
+
+    email = forms.CharField(
+        label='Email',
+        error_messages={
+            'required': 'E-mail is required'
+        },
+        help_text='The e-mail must be valid.',
     )
 
     password = forms.CharField(
@@ -57,10 +80,14 @@ class RegisterForm(forms.ModelForm):
         label='Password',
         validators=[strong_password]
     )
+
     confirm_password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
         label='Confirm password',
+        error_messages={
+            'required': 'Please, repeat your password'
+        },
     )
 
     class Meta:
@@ -73,13 +100,7 @@ class RegisterForm(forms.ModelForm):
             'password',
         ]
         labels = {
-            'first_name': 'First name',
-            'last_name': 'Last name',
             'username': 'Username',
-            'email': 'Email',
-        }
-        help_texts = {
-            'email': 'The e-mail must be valid.',
         }
 
     def clean_password(self):
