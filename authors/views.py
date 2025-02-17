@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import RegisterForm, LoginForm
@@ -11,7 +12,7 @@ def register_view(request):
     form = RegisterForm(register_form_data)
     context = {
         'form': form,
-        'form_action': reverse("authors:register"),
+        'form_action': reverse("authors:register_create"),
     }
 
     return render(
@@ -36,6 +37,7 @@ def register_create_view(request):
         messages.success(request, 'Your user has been created, please log in')
 
         del request.session['register_form_data']
+        return redirect('authors:login')
 
     return redirect('authors:register')
 
@@ -74,3 +76,9 @@ def login_create_view(request):
         messages.error(request, 'Invalid username or password')
 
     return redirect(login_url)
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def logout_view(request):
+    logout(request)
+    return redirect('authors:login')
