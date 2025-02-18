@@ -80,5 +80,11 @@ def login_create_view(request):
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def logout_view(request):
+    if not request.POST:
+        return redirect('authors:login')
+
+    if request.POST.get('username') != request.user.username:
+        return redirect('authors:login')
+
     logout(request)
     return redirect('authors:login')
