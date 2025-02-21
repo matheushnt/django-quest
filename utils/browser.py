@@ -1,6 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 ROOT_PATH = Path(__file__).parent.parent
 CHROMEDRIVE_NAME = 'chromedriver.exe'
@@ -13,6 +17,9 @@ def make_chrome_browser(*options):
     if options is not None:
         for option in options:
             chrome_options.add_argument(option)
+
+    if os.getenv('SELENIUM_HEADLESS') == '1':
+        chrome_options.add_argument('--headless')
 
     chrome_service = Service(executable_path=CHROMEDRIVER_PATH)
     browser = webdriver.Chrome(options=chrome_options, service=chrome_service)
