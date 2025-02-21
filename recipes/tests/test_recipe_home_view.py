@@ -53,14 +53,7 @@ class RecipeHomeViewTest(RecipeTestBase):
 
     # @patch('recipes.views.PER_PAGE', new=3)
     def test_recipe_home_is_paginated(self):
-        for i in range(10):
-            kwargs = {
-                'slug': f'slug-diff{i}',
-                'author': {
-                    'username': f'usernm{i}'
-                }
-            }
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(10)
 
         with patch('recipes.views.PER_PAGE', new=3):
             url = reverse('recipes:home')
@@ -75,14 +68,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertLessEqual(len(paginator.get_page(4)), 3)
 
     def test_invalid_page_query_uses_page_one(self):
-        for i in range(10):
-            kwargs = {
-                'slug': f'slug-diff{i}',
-                'author': {
-                    'username': f'usernm{i}'
-                }
-            }
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(10)
 
         with patch('recipes.views.PER_PAGE', new=3):
             url = reverse('recipes:home')
