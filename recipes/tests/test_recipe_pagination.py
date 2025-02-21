@@ -1,7 +1,9 @@
 from .test_recipe_base import RecipeTestBase
 from django.urls import reverse
+import pytest
 
 
+@pytest.mark.slow
 class PaginationTest(RecipeTestBase):
     def make_recipes(self, qty_recipes):
         for i in range(qty_recipes):
