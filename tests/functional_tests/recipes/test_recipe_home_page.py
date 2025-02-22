@@ -33,3 +33,20 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         body = self.browser.find_element(By.TAG_NAME, 'body').text
 
         self.assertIn(title_needed, body)
+
+    @patch('recipes.views.PER_PAGE', new=2)
+    def test_recipe_home_page_pagination(self):
+        self.make_recipe_in_batch(9)
+        self.browser.get(self.live_server_url)
+
+        page2 = self.browser.find_element(
+            By.XPATH,
+            '//a[@aria-label="Go to page 2"]'
+        )
+
+        page2.click()
+
+        self.assertEqual(
+            len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
+            2
+        )
