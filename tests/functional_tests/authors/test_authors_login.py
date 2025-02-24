@@ -27,3 +27,10 @@ class AuthorsLoginTest(AuthorsBaseTest):
         body = self.browser.find_element(By.TAG_NAME, 'body').text
         msg_login = f'Your are logged in with {user.username}.'
         self.assertIn(msg_login, body)
+
+    def test_login_create_raises_404_if_not_POST_method(self):
+        url_login_create = reverse('authors:login_create')
+        self.browser.get(self.live_server_url + url_login_create)
+
+        body = self.browser.find_element(By.TAG_NAME, 'body').text
+        self.assertIn('Not Found', body)
