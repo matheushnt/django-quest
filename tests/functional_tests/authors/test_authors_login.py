@@ -49,3 +49,18 @@ class AuthorsLoginTest(AuthorsBaseTest):
         body = self.get_body()
 
         self.assertIn('Invalid username or password', body)
+
+    def test_form_login_invalid_credentials(self):
+        url_login = reverse('authors:login')
+        self.browser.get(self.live_server_url + url_login)
+
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+        username_field = self.get_by_placeholder(form, 'Type your username')
+        password_field = self.get_by_placeholder(form, 'Type your password')
+        username_field.send_keys('invalid_user')
+        password_field.send_keys('invalid_password')
+        form.submit()
+
+        body = self.get_body()
+
+        self.assertIn('Invalid credentials', body)
