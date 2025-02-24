@@ -16,12 +16,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             if field.is_displayed():
                 field.send_keys(' ' * 20)
 
-    def get_by_placeholder(self, web_element, placeholder):
-        return web_element.find_element(
-            By.XPATH,
-            f'//input[@placeholder="{placeholder}"]'
-        )
-
     def get_form(self):
         return self.browser.find_element(
             By.XPATH,
