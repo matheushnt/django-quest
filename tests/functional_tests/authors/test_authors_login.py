@@ -24,7 +24,7 @@ class AuthorsLoginTest(AuthorsBaseTest):
         password_field.send_keys(str_password)
         form.submit()
 
-        body = self.browser.find_element(By.TAG_NAME, 'body').text
+        body = self.get_body()
         msg_login = f'Your are logged in with {user.username}.'
         self.assertIn(msg_login, body)
 
@@ -32,5 +32,20 @@ class AuthorsLoginTest(AuthorsBaseTest):
         url_login_create = reverse('authors:login_create')
         self.browser.get(self.live_server_url + url_login_create)
 
-        body = self.browser.find_element(By.TAG_NAME, 'body').text
+        body = self.get_body()
         self.assertIn('Not Found', body)
+
+    def test_form_login_is_invalid(self):
+        url_login = reverse('authors:login')
+        self.browser.get(self.live_server_url + url_login)
+
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+        username_field = self.get_by_placeholder(form, 'Type your username')
+        password_field = self.get_by_placeholder(form, 'Type your password')
+        username_field.send_keys(' ')
+        password_field.send_keys(' ')
+        form.submit()
+
+        body = self.get_body()
+
+        self.assertIn('Invalid username or password', body)

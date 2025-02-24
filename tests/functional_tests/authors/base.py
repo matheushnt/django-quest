@@ -21,3 +21,6 @@ class AuthorsBaseTest(StaticLiveServerTestCase):
             By.XPATH,
             f'//input[@placeholder="{placeholder}"]'
         )
+
+    def get_body(self):
+        return self.browser.find_element(By.TAG_NAME, 'body').text
