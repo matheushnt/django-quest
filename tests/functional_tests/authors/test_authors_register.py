@@ -45,8 +45,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
 
             form = self.get_form()
 
-            self.sleep()
-
             self.assertIn('Type your first name', form.text)
         self.form_field_test_with_callback(callback)
 
@@ -57,8 +55,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             last_name_field.send_keys(Keys.ENTER)
 
             form = self.get_form()
-
-            self.sleep()
 
             self.assertIn('Type your last name', form.text)
         self.form_field_test_with_callback(callback)
@@ -71,8 +67,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
 
             form = self.get_form()
 
-            self.sleep()
-
             self.assertIn('This field must not be empty', form.text)
         self.form_field_test_with_callback(callback)
 
@@ -83,8 +77,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             email_field.send_keys(Keys.ENTER)
 
             form = self.get_form()
-
-            self.sleep()
 
             self.assertIn('E-mail is required', form.text)
         self.form_field_test_with_callback(callback)
@@ -99,8 +91,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             confirm_password.send_keys(Keys.ENTER)
 
             form = self.get_form()
-
-            self.sleep()
 
             self.assertIn('Passwords must be the same', form.text)
         self.form_field_test_with_callback(callback)
