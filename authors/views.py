@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from recipes.models import Recipe
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, AuthorRecipeForm
 
 
 def register_view(request):
@@ -113,9 +113,18 @@ def dashboard_recipe_edit(request, id):
         pk=id,
         is_published=False,
         author=request.user,
-    )
+    ).first()
 
     if not recipe:
         raise Http404()
 
-    return render(request, 'authors/pages/dashboard_recipe.html')
+    form = AuthorRecipeForm(
+        request.POST or None,
+        instance=recipe,
+    )
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'authors/pages/dashboard_recipe.html', context)
