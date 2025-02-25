@@ -298,13 +298,13 @@ h6 {
     background: var(--color-gray-3);
     padding: 0.5rem 1rem;
 }
-  
+
 .pagination .page-link {
     text-decoration: none;
     background: var(--color-primary);
     color: var(--color-white);
 }
-  
+
 .pagination .page-current {
     background: var(--color-primary-dark);
 }
@@ -410,6 +410,11 @@ h6 {
     border: 1px solid var(--color-debug-dark);
     background: var(--color-debug-light);
     color: var(--color-debug-dark);
+}
+
+/* Authors */
+.login-message {
+    margin: 1rem 0;
 }
 
 
