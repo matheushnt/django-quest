@@ -6,6 +6,23 @@
     <div class="main-content text-info-center container">
         <h2>Dashboard ({{ user }})</h2>
         {% include "authors/partials/login_message.html" %}
+
+        <div class="authors-dashboard-container">
+            <h3>Your recipes</h3>
+            {% for recipe in recipes %}
+                <ul>
+                    <li>
+                        <a href="#">{{ recipe.title }}</a>
+                    </li>
+                </ul>
+            {% empty %}
+                <ul>
+                    <li>
+                        <p>You do not have recipes, please create one</p>
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
     </div>
 
     {% include "global/partials/message.html" %}

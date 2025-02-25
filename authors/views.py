@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from recipes.models import Recipe
 from .forms import RegisterForm, LoginForm
 
 
@@ -94,4 +95,13 @@ def logout_view(request):
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard(request):
-    return render(request, 'authors/pages/dashboard.html')
+    recipes = Recipe.objects.filter(
+        is_published=False,
+        author=request.user
+    )
+
+    context = {
+        'recipes': recipes,
+    }
+
+    return render(request, 'authors/pages/dashboard.html', context)
