@@ -3,8 +3,10 @@ from django.test import TestCase as DjangoTestCase
 from django.urls import reverse
 from authors.forms import RegisterForm
 from parameterized import parameterized
+import pytest
 
 
+@pytest.mark.fast
 class AuthorRegisterFormUnitTest(TestCase):
     @parameterized.expand([
         ('username', 'Your username'),
@@ -51,6 +53,7 @@ class AuthorRegisterFormUnitTest(TestCase):
         self.assertEqual(needed, current)
 
 
+@pytest.mark.fast
 class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     def setUp(self):
         self.form_data = {

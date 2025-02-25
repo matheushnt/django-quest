@@ -1,8 +1,10 @@
 from .test_recipe_base import RecipeTestBase, Recipe
 from django.core.exceptions import ValidationError
 from parameterized import parameterized  # type: ignore
+import pytest
 
 
+@pytest.mark.fast
 class RecipeModelTest(RecipeTestBase):
     def setUp(self) -> None:
         self.recipe = self.make_recipe()

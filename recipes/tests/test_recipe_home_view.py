@@ -2,21 +2,26 @@ from django.urls import reverse, resolve
 from recipes import views
 from .test_recipe_base import RecipeTestBase
 from unittest.mock import patch
+import pytest
 
 
 class RecipeHomeViewTest(RecipeTestBase):
+    @pytest.mark.fast
     def test_recipe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
 
+    @pytest.mark.fast
     def test_recipe_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertEqual(response.status_code, 200)
 
+    @pytest.mark.fast
     def test_recipe_home_view_loads_correct_template(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
 
+    @pytest.mark.fast
     def test_recipe_home_template_shows_not_found_recipes_if_no_recipes(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertIn(
@@ -24,6 +29,7 @@ class RecipeHomeViewTest(RecipeTestBase):
             response.content.decode('utf-8'),
         )
 
+    @pytest.mark.fast
     def test_recipe_home_template_loads_recipes(self):
         # Need a recipe for this test
         self.make_recipe()
@@ -37,6 +43,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertEqual(len(response_context_recipes), 1)
         self.assertEqual(response.status_code, 200)
 
+    @pytest.mark.fast
     def test_recipe_home_template_wont_load_recipes_not_published(self):
         # Need a recipe for this test
         self.make_recipe(is_published=False)
@@ -51,6 +58,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         content = response.content.decode('utf-8')
         self.assertIn('Search for &quot;Receita de bolo&quot; | ', content)
 
+    @pytest.mark.slow
     # @patch('recipes.views.PER_PAGE', new=3)
     def test_recipe_home_is_paginated(self):
         self.make_recipe_in_batch(10)
@@ -67,6 +75,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertLessEqual(len(paginator.get_page(3)), 3)
         self.assertLessEqual(len(paginator.get_page(4)), 3)
 
+    @pytest.mark.slow
     def test_invalid_page_query_uses_page_one(self):
         self.make_recipe_in_batch(10)
 
