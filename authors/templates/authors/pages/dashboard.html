@@ -3,16 +3,21 @@
 {% block title %}Dashboard ({{ user }}) | {% endblock title %}
 
 {% block content %}
-    <div class="main-content text-info-center container">
-        <h2>Dashboard ({{ user }})</h2>
-        {% include "authors/partials/login_message.html" %}
+<div class="main-content text-info-center container">
+    <h2>Dashboard ({{ user }})</h2>
+    {% include "authors/partials/login_message.html" %}
+    {% include "global/partials/message.html" %}
 
         <div class="authors-dashboard-container">
             <h3>Your recipes</h3>
             {% for recipe in recipes %}
                 <ul>
                     <li>
-                        <a href="{% url "authors:dashboard_recipe_edit" recipe.id %}">{{ recipe.title }}</a>
+                        <a href="{% url "authors:dashboard_recipe_edit" recipe.id %}">{{ recipe.title }}</a> -
+                        <form class="inline-form form-delete" action="{% url "authors:dashboard_recipe_delete" recipe.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="plaintext-button" type="submit">❌</button>
+                        </form>
                     </li>
                 </ul>
             {% empty %}
@@ -24,6 +29,4 @@
             {% endfor %}
         </div>
     </div>
-
-    {% include "global/partials/message.html" %}
 {% endblock content %}

@@ -171,3 +171,19 @@ def dashboard_recipe_new(request):
     }
 
     return render(request, 'authors/pages/dashboard_recipe.html', context)
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_delete(request, id):
+    recipe = Recipe.objects.filter(
+        pk=id,
+        is_published=False,
+        author=request.user,
+    ).first()
+
+    if not recipe:
+        raise Http404()
+
+    recipe.delete()
+    messages.success(request, 'Deleted successfully')
+    return redirect('authors:dashboard')
