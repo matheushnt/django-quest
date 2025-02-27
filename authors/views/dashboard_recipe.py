@@ -9,12 +9,43 @@ from authors.forms import AuthorRecipeForm
 
 
 class DashboardRecipe(View):
+    def get_recipe(self, id):
+        recipe = None
+
+        if id:
+            recipe = Recipe.objects.filter(
+                pk=id,
+                is_published=False,
+                author=self.request.user,
+            ).first()
+
+        if not recipe:
+            raise Http404()
+
+        return recipe
+
+    def render_recipe(self, form):
+        context = {
+            'form': form
+        }
+
+        return render(
+            self.request,
+            'authors/pages/dashboard_recipe.html',
+            context,
+        )
+
     def get(self, request, id):
-        recipe = Recipe.objects.filter(
-            pk=id,
-            is_published=False,
-            author=request.user,
-        ).first()
+        recipe = self.get_recipe(id)
+
+        form = AuthorRecipeForm(
+            instance=recipe
+        )
+
+        return self.render_recipe(form)
+
+    def post(self, request, id):
+        recipe = self.get_recipe(id)
 
         if not recipe:
             raise Http404()
@@ -43,8 +74,4 @@ class DashboardRecipe(View):
                 )
             )
 
-        context = {
-            'form': form
-        }
-
-        return render(request, 'authors/pages/dashboard_recipe.html', context)
+        return self.render_recipe(form)
