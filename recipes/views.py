@@ -3,10 +3,40 @@ import os
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404
 from django.db.models import Q
+from django.views.generic.list import ListView
 from utils.pagination import make_pagination
 from .models import Recipe
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
+
+
+class RecipeListViewBase(ListView):
+    model = Recipe
+    context_object_name = 'recipes'
+    ordering = ['-id']
+    template_name = 'recipes/pages/home.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            is_published=True,
+        )
+
+        return queryset
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        page_obj, pagination_range = make_pagination(
+            self.request,
+            context.get('recipes'),
+            PER_PAGE
+        )
+
+        context.update(
+            {'recipes': page_obj, 'pagination_range': pagination_range}
+        )
+
+        return context
 
 
 # Create your views here.
