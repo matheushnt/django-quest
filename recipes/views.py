@@ -43,24 +43,6 @@ class RecipeListViewHome(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
 
 
-# Create your views here.
-def home(request):
-    recipes = Recipe.objects.filter(
-        is_published=True,
-    ).order_by('-id')
-
-    page_obj, pagination_range = make_pagination(
-        request,
-        recipes,
-        PER_PAGE,
-    )
-
-    return render(request, 'recipes/pages/home.html', context={
-        'recipes': page_obj,
-        'pagination_range': pagination_range
-    })
-
-
 class RecipeListViewCategory(RecipeListViewBase):
     template_name = 'recipes/pages/category.html'
 
@@ -87,6 +69,55 @@ class RecipeListViewCategory(RecipeListViewBase):
         )
 
         return context
+
+
+class RecipeListViewSearch(RecipeListViewBase):
+    template_name = 'recipes/pages/search.html'
+
+    def get_queryset(self):
+        search_term = self.request.GET.get('q')
+
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            Q(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term)
+            ),
+            is_published=True
+        ).order_by('-id')
+
+        return queryset
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        search_term = self.request.GET.get('q')
+
+        context.update(
+            {
+                'page_title': f'Search for "{search_term}" | ',
+                'search_term': search_term,
+                'additional_url_query': f'&q={search_term}',
+            }
+        )
+
+        return context
+
+
+def home(request):
+    recipes = Recipe.objects.filter(
+        is_published=True,
+    ).order_by('-id')
+
+    page_obj, pagination_range = make_pagination(
+        request,
+        recipes,
+        PER_PAGE,
+    )
+
+    return render(request, 'recipes/pages/home.html', context={
+        'recipes': page_obj,
+        'pagination_range': pagination_range
+    })
 
 
 def category(request, category_id):
