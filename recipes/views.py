@@ -108,6 +108,17 @@ class RecipeDetailView(DetailView):
     context_object_name = 'recipe'
     template_name = 'recipes/pages/recipe-view.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            is_published=True,
+        )
+
+        if not queryset:
+            raise Http404()
+
+        return queryset
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
