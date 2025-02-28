@@ -39,6 +39,10 @@ class RecipeListViewBase(ListView):
         return context
 
 
+class RecipeListViewHome(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html'
+
+
 # Create your views here.
 def home(request):
     recipes = Recipe.objects.filter(
@@ -55,6 +59,34 @@ def home(request):
         'recipes': page_obj,
         'pagination_range': pagination_range
     })
+
+
+class RecipeListViewCategory(RecipeListViewBase):
+    template_name = 'recipes/pages/category.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            category__id=self.kwargs.get('category_id'),
+            is_published=True,
+        ).order_by('-id')
+
+        return queryset
+
+    def get_context_data(self):
+        context = super().get_context_data()
+
+        page_obj, pagination_range = make_pagination(
+            self.request,
+            context.get('recipes'),
+            PER_PAGE
+        )
+
+        context.update(
+            {'recipes': page_obj, 'pagination_range': pagination_range}
+        )
+
+        return context
 
 
 def category(request, category_id):
